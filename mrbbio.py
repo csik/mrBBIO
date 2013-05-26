@@ -158,7 +158,7 @@ def pinMode(pin, direction):
     """pinMode(pin, direction) opens (exports) a pin for use, sets the pinmux, and
     sets the direction"""
     if pin in digitalPinDef: # if we know how to refer to the pin:
-        if not os.path.exists('/sys/class/gpio/'+gpio):
+        if not os.path.exists('/sys/class/gpio/gpio%d' %(digitalPinDef[pin])):
             fw = file("/sys/class/gpio/export", "w")
             fw.write("%d" % (digitalPinDef[pin])) # write the pin to export to userspace
             fw.close()
