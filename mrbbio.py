@@ -165,14 +165,8 @@ def pinMode(pin, direction):
 		fw = file(fileName, "w")
 		if direction == INPUT: 
 			fw.write("in") # write the diretion
-			muxfile = file("/sys/kernel/debug/omap_mux/" + pinMuxDef[pin], "w") # open its mux file
-			muxfile.write("2F") # put it into mode 7 input, no pulldown
-			muxfile.close
 		else:
-			fw.write("out") # write the diretion
-			muxfile = file("/sys/kernel/debug/omap_mux/" + pinMuxDef[pin], "w") # open its mux file
-			muxfile.write("7") # put it into mode 7 output)
-			muxfile.close
+			fw.write("out") # write the direction
 		fw.close()
 		pinList.append(digitalPinDef[pin]) # Keep a list of exported pins so that we can unexport them.
 	else: #if we don't know how to refer to a pin:
