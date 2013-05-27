@@ -201,6 +201,42 @@ def digitalRead(pin):
     else: # if we haven't exported the pin, print an error (not working for some reason):
         print "digitalRead error: Pin mode for " + pin + " has not been set. Use pinMode(pin, OUTPUT) first."
         return -1;
+        
+def pwmMode(pin):
+    """pwmMode(pin) sets up a pin to be pwm and gives it an initial value
+    Acceptible pin numbers are """
+    pin_name = "bone_pwm_"+pin[0:2]+"_"+pin[3:5]
+    fileName = "/sys/devices/bone_capemgr.8/slots"
+    fw = file(fileName, "w") 
+    try:
+        fw.writelines("""am33xx_pwm
+        """+pin_namebone_pwm_P8_13+"""
+        """)   
+    except:
+        print "unable to write"
+    #fw.close()
+
+def pwm(pin, period, duty):
+    pwm_dir = "/sys/devices/ocp.2/"
+    try:
+        l = os.listdir(pwm_dir)
+    except:
+        print "Cape not initiated -- did you run pwmMode?"
+    for fl in l:
+        if fl[0:9] == 'pwm_test_': 
+            if fl[9:14] == pin[0:2]+"_"+pin[3:5]:
+                pwm_pin = pwm_dir + fl
+                break
+            else:
+                print "pin dead"
+    period_file = pwm_pin+'/period'
+    fw = file(period_file, 'w')
+    fw.write(str(period))
+    
+    duty_file = pwm_pin+'/duty'
+    fw = file(duty_file, 'w')
+    fw.write(str(duty))
+    
 
 def analogRead(pin): #under construction!
     """analogRead(pin) returns analog value for a given pin."""
