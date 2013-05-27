@@ -207,13 +207,18 @@ def pwmMode(pin):
     Acceptible pin numbers are """
     pin_name = "bone_pwm_"+pin[0:2]+"_"+pin[3:5]
     fileName = "/sys/devices/bone_capemgr.8/slots"
-    fw = file(fileName, "w") 
     try:
-        fw.writelines("""am33xx_pwm
-        """+pin_namebone_pwm_P8_13+"""
-        """)   
+        fw = file(fileName, "w")
+        fw.write("am33xx_pwm")
+        fw.close()
     except:
-        print "unable to write"
+        print "unable to write am33xx_pwm"
+    try:
+        fw = file(fileName, "w")
+        fw.write(pin_name)
+        fw.close()
+    except:
+        print "unable to write " + pin_name
     #fw.close()
 
 def pwm(pin, period, duty):
